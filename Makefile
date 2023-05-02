@@ -32,19 +32,15 @@ dep:
 
 .PHONY: run
 run:
-	@go run ./cmd/cli
+	@go run ./cmd/navigator
 
-.PHONY: build
+.PHONY: install
 build:
-	@go build ./cmd/cli
+	@go install ./cmd/navigator
 
 .PHONY: gen-key
 gen-key:
 	@cosign generate-key-pair
-
-.PHONY: gen-proto
-gen-proto:
-	@./scripts/gen-proto.sh navigatorservice
 
 .PHONY: release-dry
 release-dry:
