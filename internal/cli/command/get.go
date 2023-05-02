@@ -1,6 +1,8 @@
 package command
 
 import (
+	"fmt"
+
 	"github.com/flowshot-io/navigator-client-go/navigatorservice/v1"
 	"github.com/spf13/cobra"
 )
@@ -12,21 +14,19 @@ func (c *Command) NewGetCommand() *cobra.Command {
 		Use:   "get",
 		Short: "Get asset",
 		Long:  `Get asset`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &navigatorservice.GetAssetRequest{
 				Id: ID,
 			}
 
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
-				return
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			resp, err := client.GetAsset(cmd.Context(), request)
 			if err != nil {
-				cmd.PrintErrln("Unable to get asset", err)
-				return
+				return fmt.Errorf("unable to get asset: %w", err)
 			}
 
 			assets := []*navigatorservice.Asset{
@@ -34,6 +34,8 @@ func (c *Command) NewGetCommand() *cobra.Command {
 			}
 
 			cmd.Println(renderAssets(assets))
+
+			return nil
 		},
 	}
 

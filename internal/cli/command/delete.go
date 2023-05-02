@@ -1,6 +1,8 @@
 package command
 
 import (
+	"fmt"
+
 	"github.com/flowshot-io/navigator-client-go/navigatorservice/v1"
 	"github.com/spf13/cobra"
 )
@@ -12,24 +14,24 @@ func (c *Command) NewDeleteCommand() *cobra.Command {
 		Use:   "delete",
 		Short: "Delete asset",
 		Long:  `Delete asset`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &navigatorservice.DeleteAssetRequest{
 				Id: ID,
 			}
 
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
-				return
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			resp, err := client.DeleteAsset(cmd.Context(), request)
 			if err != nil {
-				cmd.PrintErrln("Unable to delete asset", err)
-				return
+				return fmt.Errorf("unable to delete asset: %w", err)
 			}
 
 			cmd.Println("Scheduled deletion of asset: ", ID, "See", resp.Id)
+
+			return nil
 		},
 	}
 

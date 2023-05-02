@@ -19,30 +19,29 @@ func (c *Command) NewSearchCommand() *cobra.Command {
 		Use:   "search",
 		Short: "Search assets",
 		Long:  `Search assets`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &navigatorservice.SearchAssetsRequest{
 				SearchType:  searchType,
 				SearchValue: searchValue,
 			}
 
 			if !contains(SearchTypes, searchType) {
-				cmd.PrintErrln("Invalid search type", searchType)
-				return
+				return fmt.Errorf("invalid search type: %s", searchType)
 			}
 
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
-				return
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			resp, err := client.SearchAssets(cmd.Context(), request)
 			if err != nil {
-				cmd.PrintErrln("Unable to search asset", err)
-				return
+				return fmt.Errorf("unable to search for assets: %w", err)
 			}
 
 			cmd.Println(renderSearchResults(resp.Results))
+
+			return nil
 		},
 	}
 

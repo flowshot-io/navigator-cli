@@ -24,17 +24,18 @@ func (c *Command) NewImportCommand() *cobra.Command {
 		Use:   "import",
 		Short: "Import assets",
 		Long:  `Import assets`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			err = c.importFilesByTypes(cmd.Context(), client, path, []string{".jpg", ".jpeg", ".png"}, time.Duration(waitTime)*time.Millisecond)
 			if err != nil {
-				cmd.PrintErrln("Unable to import assets", err)
-				return
+				return fmt.Errorf("unable to import assets: %w", err)
 			}
+
+			return nil
 		},
 	}
 

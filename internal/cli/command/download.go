@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -18,7 +19,7 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 		Use:   "download",
 		Short: "Download file",
 		Long:  `Download file`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			req := &navigatorservice.DownloadAssetRequest{
 				Id:        assetID,
 				ChunkSize: chunkSize,
@@ -26,20 +27,17 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
-				return
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			stream, err := client.DownloadAsset(cmd.Context(), req)
 			if err != nil {
-				cmd.PrintErrln("Unable to create download stream", err)
-				return
+				return fmt.Errorf("unable to create download stream: %w", err)
 			}
 
 			file, err := os.CreateTemp(destinationPath, "*")
 			if err != nil {
-				cmd.PrintErrln("Unable to create local file", err)
-				return
+				return fmt.Errorf("unable to create local file: %w", err)
 			}
 			defer file.Close()
 
@@ -51,8 +49,7 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 					if err == io.EOF {
 						break
 					}
-					cmd.PrintErrln("Unable to receive file chunk", err)
-					return
+					return fmt.Errorf("unable to receive file chunk: %w", err)
 				}
 
 				if fileName == "" {
@@ -61,8 +58,7 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 
 				_, err = file.Write(res.FileChunk)
 				if err != nil {
-					cmd.PrintErrln("Unable to write file chunk", err)
-					return
+					return fmt.Errorf("unable to write file chunk: %w", err)
 				}
 
 				if res.IsLastChunk {
@@ -72,11 +68,12 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 
 			err = os.Rename(file.Name(), fileName)
 			if err != nil {
-				cmd.PrintErrln("Unable to rename file", err)
-				return
+				return fmt.Errorf("unable to rename file: %w", err)
 			}
 
 			cmd.Println("Downloaded file to", fileName)
+
+			return nil
 		},
 	}
 

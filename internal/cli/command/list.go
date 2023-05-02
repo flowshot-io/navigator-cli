@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/flowshot-io/navigator-client-go/navigatorservice/v1"
@@ -13,22 +14,22 @@ func (c *Command) NewListCommand() *cobra.Command {
 		Use:   "list",
 		Short: "List assets",
 		Long:  `List assets`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &navigatorservice.ListAssetsRequest{}
 
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
-				return
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			resp, err := client.ListAssets(cmd.Context(), request)
 			if err != nil {
-				cmd.PrintErrln("Unable to list assets", err)
-				return
+				return fmt.Errorf("unable to list assets: %w", err)
 			}
 
 			cmd.Println(renderAssets(resp.Assets))
+
+			return nil
 		},
 	}
 

@@ -13,6 +13,6 @@ func main() {
 	}
 
 	if err := app.Execute(); err != nil {
-		log.Fatal(err)
+		return
 	}
 }

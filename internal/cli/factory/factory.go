@@ -13,11 +13,9 @@ type ClientFactory interface {
 }
 
 type clientFactory struct {
-	// logger log.Logger
 }
 
 func NewClientFactory() ClientFactory {
-	//logger := log.NewCLILogger()
 	return &clientFactory{}
 }
 

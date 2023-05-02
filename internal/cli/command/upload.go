@@ -21,20 +21,20 @@ func (c *Command) NewUploadCommand() *cobra.Command {
 		Use:   "upload",
 		Short: "Upload a file to storage",
 		Long:  `Upload a file to storage. A chunk size of 5mb or greater will use multipart upload into s3 storage.`,
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
-				cmd.PrintErrln("Unable to create navigator client", err)
-				return
+				return fmt.Errorf("unable to create navigator client: %w", err)
 			}
 
 			err = c.uploadFile(cmd.Context(), client, fileName, AssetID, chunkSizeBytes)
 			if err != nil {
-				cmd.PrintErrln("Unable to upload file", err)
-				return
+				return fmt.Errorf("unable to upload file: %w", err)
 			}
 
 			cmd.Println("Upload complete")
+
+			return nil
 		},
 	}
 
