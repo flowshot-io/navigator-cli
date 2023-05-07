@@ -36,7 +36,6 @@ func NewCommand(d *Driver) *cobra.Command {
 
 	createCMD := cmd.NewCreateCommand()
 	getCMD := cmd.NewGetCommand()
-	moveCMD := cmd.NewMoveCommand()
 	uploadCMD := cmd.NewUploadCommand()
 	downloadCMD := cmd.NewDownloadCommand()
 	listCMD := cmd.NewListCommand()
@@ -48,7 +47,6 @@ func NewCommand(d *Driver) *cobra.Command {
 	c.AddCommand(
 		createCMD,
 		getCMD,
-		moveCMD,
 		uploadCMD,
 		downloadCMD,
 		listCMD,
