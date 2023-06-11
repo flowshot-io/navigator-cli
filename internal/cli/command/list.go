@@ -41,7 +41,7 @@ func renderAssets(assets []*navigatorservice.Asset) string {
 	table := tablewriter.NewWriter(tableString)
 
 	table.SetCaption(true, "Query Results.")
-	table.SetHeader([]string{"ID", "Name", "Type"})
+	table.SetHeader([]string{"ID", "Name", "Type", "Status"})
 
 	for _, result := range assets {
 		row := []string{

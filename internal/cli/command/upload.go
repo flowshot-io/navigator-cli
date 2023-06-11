@@ -20,7 +20,7 @@ func (c *Command) NewUploadCommand() *cobra.Command {
 	cc := &cobra.Command{
 		Use:   "upload",
 		Short: "Upload a file to storage",
-		Long:  `Upload a file to storage. A chunk size of 5mb or greater will use multipart upload into s3 storage.`,
+		Long:  `Upload a file to storage.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			client, err := c.driver.clientFactory.NavigatorClient(cmd)
 			if err != nil {
