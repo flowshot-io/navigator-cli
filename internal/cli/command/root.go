@@ -23,10 +23,11 @@ func NewDriver() *Driver {
 
 func NewCommand(d *Driver) *cobra.Command {
 	c := &cobra.Command{
-		Use:          "navigator",
-		Short:        "A command-line tool for Navigator.",
-		Long:         `A command-line tool for managing stored assets via Navigator.`,
-		SilenceUsage: true,
+		Use:           "navigator",
+		Short:         "A command-line tool for Navigator.",
+		Long:          `A command-line tool for managing stored assets via Navigator.`,
+		SilenceUsage:  true,
+		SilenceErrors: true,
 	}
 	c.SetVersionTemplate("{{.Version}}\n")
 

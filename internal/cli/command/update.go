@@ -3,7 +3,7 @@ package command
 import (
 	"fmt"
 
-	"github.com/flowshot-io/navigator-client-go/navigatorservice/v1"
+	"github.com/flowshot-io/navigator-client-go/commandservice/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -16,14 +16,14 @@ func (c *Command) NewUpdateCommand() *cobra.Command {
 		Short: "Update asset",
 		Long:  `Update asset`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			request := &navigatorservice.UpdateAssetRequest{
-				Id:   ID,
+			request := &commandservice.UpdateAssetRequest{
+				ID:   ID,
 				Name: name,
 			}
 
-			client, err := c.driver.clientFactory.NavigatorClient(cmd)
+			client, err := c.driver.clientFactory.CommandClient()
 			if err != nil {
-				return fmt.Errorf("unable to create navigator client: %w", err)
+				return err
 			}
 
 			resp, err := client.UpdateAsset(cmd.Context(), request)
@@ -31,7 +31,7 @@ func (c *Command) NewUpdateCommand() *cobra.Command {
 				return fmt.Errorf("unable to update asset: %w", err)
 			}
 
-			cmd.Println("Updated asset: ", resp.Asset.Id)
+			cmd.Println("Updated asset: ", resp.AssetID)
 
 			return nil
 		},
