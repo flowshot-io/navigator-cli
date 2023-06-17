@@ -1,4 +1,4 @@
-package command
+package delete
 
 import (
 	"fmt"
@@ -7,16 +7,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func (c *Command) NewDeleteCommand() *cobra.Command {
-	var ID string
-
+func (c *Command) NewAssetCommand() *cobra.Command {
 	cc := &cobra.Command{
-		Use:   "delete",
-		Short: "Delete asset",
-		Long:  `Delete asset`,
+		Use: "delete",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &commandservice.DeleteAssetRequest{
-				AssetID: ID,
+				AssetID: c.id,
 			}
 
 			client, err := c.driver.clientFactory.CommandClient()
@@ -29,15 +25,11 @@ func (c *Command) NewDeleteCommand() *cobra.Command {
 				return fmt.Errorf("unable to delete asset: %w", err)
 			}
 
-			cmd.Println("Scheduled deletion of asset: ", ID, " (message) ", resp.Message)
+			cmd.Println("Scheduled deletion of asset: ", c.id, " (message) ", resp.Message)
 
 			return nil
 		},
 	}
-
-	cc.Flags().StringVarP(&ID, "id", "i", "", "Asset ID to delete")
-
-	cc.MarkFlagRequired("id")
 
 	return cc
 }

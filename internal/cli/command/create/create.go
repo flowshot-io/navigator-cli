@@ -1,4 +1,4 @@
-package command
+package create
 
 import (
 	"fmt"
@@ -7,13 +7,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func (c *Command) NewCreateCommand() *cobra.Command {
+func (c *Command) NewAssetCommand() *cobra.Command {
 	var name string
 
 	cc := &cobra.Command{
-		Use:   "create",
-		Short: "Create assets",
-		Long:  `Create assets`,
+		Use:   "asset",
+		Short: "Creates an asset",
+		Long:  `Creates an asset`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &commandservice.CreateAssetRequest{
 				Name: name,

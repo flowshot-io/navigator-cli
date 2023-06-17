@@ -5,43 +5,29 @@ import (
 
 	"github.com/flowshot-io/navigator-client-go/commandservice/v1"
 	"github.com/flowshot-io/navigator-client-go/fileservice/v1"
-	"github.com/flowshot-io/navigator-client-go/navigatorservice/v1"
 	"github.com/flowshot-io/navigator-client-go/queryservice/v1"
-	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type ClientFactory interface {
-	NavigatorClient(c *cobra.Command) (navigatorservice.NavigatorServiceClient, error)
 	QueryClient() (queryservice.QueryServiceClient, error)
 	CommandClient() (commandservice.CommandServiceClient, error)
 	FileClient() (fileservice.FileServiceClient, error)
 }
 
 type clientFactory struct {
-	frontendHost string
-	fileHost     string
-	commandHost  string
-	queryHost    string
+	fileHost    string
+	commandHost string
+	queryHost   string
 }
 
 func NewClientFactory() ClientFactory {
 	return &clientFactory{
-		frontendHost: "localhost:50052",
-		queryHost:    "localhost:50053",
-		commandHost:  "localhost:50054",
-		fileHost:     "localhost:50053",
+		queryHost:   "localhost:50053",
+		commandHost: "localhost:50054",
+		fileHost:    "localhost:50053",
 	}
-}
-
-func (f *clientFactory) NavigatorClient(c *cobra.Command) (navigatorservice.NavigatorServiceClient, error) {
-	conn, err := grpc.Dial(f.frontendHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		return nil, fmt.Errorf("unable to create frontend gRPC connection: %w", err)
-	}
-
-	return navigatorservice.NewNavigatorServiceClient(conn), nil
 }
 
 func (f *clientFactory) QueryClient() (queryservice.QueryServiceClient, error) {
