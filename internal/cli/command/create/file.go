@@ -40,6 +40,11 @@ func (c *Command) NewFileCommand() *cobra.Command {
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// ctx, cancel := context.WithCancel(cmd.Context())
+			// defer cancel()
+
+			ctx := context.Background()
+
 			request := &fileservice.CreateFileRequest{
 				AssetID: assetID,
 				Key:     filepath.Base(filePath),
@@ -50,12 +55,12 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				return err
 			}
 
-			resp, err := client.CreateFile(cmd.Context(), request)
+			resp, err := client.CreateFile(ctx, request)
 			if err != nil {
 				return fmt.Errorf("unable to create file: %w", err)
 			}
 
-			cmd.Println("Created file: ", resp.FileID)
+			cmd.Println("Creating file...")
 
 			fileInfo, err := os.Stat(filePath)
 			if err != nil {
@@ -68,15 +73,15 @@ func (c *Command) NewFileCommand() *cobra.Command {
 					return fmt.Errorf("unable to read file: %w", err)
 				}
 
-				_, err = client.WriteFile(cmd.Context(), &fileservice.WriteFileRequest{
+				cmd.Println("Uploading file...")
+
+				_, err = client.WriteFile(ctx, &fileservice.WriteFileRequest{
 					FileID: resp.FileID,
 					Data:   data,
 				})
 				if err != nil {
 					return fmt.Errorf("unable to write file: %w", err)
 				}
-
-				cmd.Println("File uploaded successfully.")
 			} else {
 				// Open the file for reading
 				file, err := os.Open(filePath)
@@ -85,6 +90,8 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				}
 				defer file.Close()
 
+				cmd.Println("Uploading multipart file...")
+
 				partChan := make(chan part)
 				errChan := make(chan error, concLimit)
 				partNumbers := make([]int64, 0, 1024) // preallocate a large slice to avoid frequent resizing
@@ -92,15 +99,12 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				var wg sync.WaitGroup
 				wg.Add(concLimit)
 
-				// Create a cancelable context
-				ctx, cancel := context.WithCancel(cmd.Context())
-				defer cancel()
-
 				for i := 0; i < concLimit; i++ {
 					go func() {
 						defer wg.Done()
 
 						for p := range partChan {
+							cmd.Println("Uploading part", p.num, "of", fileInfo.Size()/partSize+1)
 							_, err := client.WriteMultipart(ctx, &fileservice.WriteMultipartRequest{
 								FileID:     resp.FileID,
 								PartNumber: p.num,
@@ -109,7 +113,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 
 							if err != nil {
 								errChan <- fmt.Errorf("unable to upload part %d: %w", p.num, err)
-								cancel()
+								//cancel()
 								return
 							}
 						}
@@ -145,9 +149,12 @@ func (c *Command) NewFileCommand() *cobra.Command {
 
 				select {
 				case err := <-errChan:
+					cmd.PrintErrln("Error uploading part", err)
 					return err
 				default:
 				}
+
+				cmd.Println("Completing multipart upload...")
 
 				// Complete the multipart upload
 				_, err = client.CompleteMultipart(ctx, &fileservice.CompleteMultipartRequest{
@@ -157,9 +164,9 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				if err != nil {
 					return fmt.Errorf("unable to complete multipart upload: %w", err)
 				}
-
-				cmd.Println("File uploaded successfully.")
 			}
+
+			cmd.Println("File created:", resp.FileID)
 
 			return nil
 		},

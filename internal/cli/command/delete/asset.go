@@ -22,12 +22,12 @@ func (c *Command) NewAssetCommand() *cobra.Command {
 				return err
 			}
 
-			resp, err := client.DeleteAsset(cmd.Context(), request)
+			_, err = client.DeleteAsset(cmd.Context(), request)
 			if err != nil {
 				return fmt.Errorf("unable to delete asset: %w", err)
 			}
 
-			cmd.Println("Scheduled deletion of asset: ", c.id, " (message) ", resp.Message)
+			cmd.Println("Scheduled deletion of asset: ", c.id)
 
 			return nil
 		},

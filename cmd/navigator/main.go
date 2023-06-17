@@ -35,9 +35,9 @@ func main() {
 	}()
 
 	if err := app.ExecuteContext(ctx); err != nil {
-		if ctx.Err() == context.Canceled {
-			return
-		}
+		// if ctx.Err() == context.Canceled {
+		// 	return
+		// }
 
 		fmt.Println("Error executing: ", err)
 	}
