@@ -22,8 +22,8 @@ type Command struct {
 func (d *Driver) NewCreateCommand() *cobra.Command {
 	cc := &cobra.Command{
 		Use:   "create",
-		Short: "create an object.",
-		Long:  `create an object.`,
+		Short: "Create an object.",
+		Long:  "Create actions for object.",
 	}
 
 	cmd := &Command{
@@ -32,6 +32,7 @@ func (d *Driver) NewCreateCommand() *cobra.Command {
 
 	cc.AddCommand(
 		cmd.NewAssetCommand(),
+		cmd.NewFileCommand(),
 	)
 
 	return cc

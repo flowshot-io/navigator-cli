@@ -10,7 +10,9 @@ import (
 
 func (c *Command) NewFileCommand() *cobra.Command {
 	cc := &cobra.Command{
-		Use: "file",
+		Use:   "file",
+		Short: "List files.",
+		Long:  `List files.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &fileservice.ListFilesRequest{}
 

@@ -10,7 +10,9 @@ import (
 
 func (c *Command) NewAssetCommand() *cobra.Command {
 	cc := &cobra.Command{
-		Use: "asset",
+		Use:   "asset",
+		Short: "List assets.",
+		Long:  `List assets.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &commandservice.ListAssetsRequest{}
 

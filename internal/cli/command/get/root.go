@@ -25,6 +25,9 @@ func (d *Driver) NewGetCommand() *cobra.Command {
 		Use:   "get",
 		Short: "Get an object.",
 		Long:  `Get an object by ID.`,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return nil
+		},
 	}
 
 	cmd := &Command{
@@ -34,6 +37,7 @@ func (d *Driver) NewGetCommand() *cobra.Command {
 	cc.AddCommand(
 		cmd.NewAssetCommand(),
 		cmd.NewFileCommand(),
+		cmd.NewDownloadCommand(),
 	)
 
 	cc.PersistentFlags().StringVarP(&cmd.id, "id", "i", "", "The ID of the object to get.")

@@ -10,7 +10,7 @@ import (
 
 func (c *Command) NewAssetCommand() *cobra.Command {
 	cc := &cobra.Command{
-		Use:   "get",
+		Use:   "asset",
 		Short: "Get asset",
 		Long:  `Get asset`,
 		RunE: func(cmd *cobra.Command, args []string) error {

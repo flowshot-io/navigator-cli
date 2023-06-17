@@ -10,7 +10,9 @@ import (
 
 func (c *Command) NewFileCommand() *cobra.Command {
 	cc := &cobra.Command{
-		Use: "file",
+		Use:   "file",
+		Short: "Get file",
+		Long:  `Get file`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &fileservice.GetFileRequest{
 				FileID: c.id,

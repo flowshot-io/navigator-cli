@@ -9,7 +9,9 @@ import (
 
 func (c *Command) NewAssetCommand() *cobra.Command {
 	cc := &cobra.Command{
-		Use: "delete",
+		Use:   "asset",
+		Short: "Delete asset",
+		Long:  `Delete asset`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &commandservice.DeleteAssetRequest{
 				AssetID: c.id,
