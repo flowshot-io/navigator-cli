@@ -33,7 +33,7 @@ func NewClientFactory() ClientFactory {
 func (f *clientFactory) SearchClient() (queryservice.QueryServiceClient, error) {
 	conn, err := grpc.Dial(f.searchHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, fmt.Errorf("unable to create query services gRPC connection: %w", err)
+		return nil, fmt.Errorf("unable to create search services gRPC connection: %w", err)
 	}
 
 	return queryservice.NewQueryServiceClient(conn), nil
@@ -42,7 +42,7 @@ func (f *clientFactory) SearchClient() (queryservice.QueryServiceClient, error) 
 func (f *clientFactory) ResourceClient() (commandservice.CommandServiceClient, error) {
 	conn, err := grpc.Dial(f.resourceHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, fmt.Errorf("unable to create command services gRPC connection: %w", err)
+		return nil, fmt.Errorf("unable to create resource services gRPC connection: %w", err)
 	}
 
 	return commandservice.NewCommandServiceClient(conn), nil
@@ -51,7 +51,7 @@ func (f *clientFactory) ResourceClient() (commandservice.CommandServiceClient, e
 func (f *clientFactory) StorageClient() (fileservice.FileServiceClient, error) {
 	conn, err := grpc.Dial(f.storageHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, fmt.Errorf("unable to create file services gRPC connection: %w", err)
+		return nil, fmt.Errorf("unable to create storage services gRPC connection: %w", err)
 	}
 
 	return fileservice.NewFileServiceClient(conn), nil
