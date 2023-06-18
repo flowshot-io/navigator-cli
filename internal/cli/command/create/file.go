@@ -50,7 +50,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				Key:     filepath.Base(filePath),
 			}
 
-			client, err := c.driver.clientFactory.FileClient()
+			client, err := c.driver.clientFactory.StorageClient()
 			if err != nil {
 				return err
 			}

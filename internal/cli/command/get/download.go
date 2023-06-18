@@ -18,7 +18,7 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 		Short: "Download a file",
 		Long:  `Download a file`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			client, err := c.driver.clientFactory.FileClient()
+			client, err := c.driver.clientFactory.StorageClient()
 			if err != nil {
 				return err
 			}
@@ -46,12 +46,12 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 					StartChunkNumber: startChunkNumber,
 				}
 
-				readFileClient, err := client.ReadFile(cmd.Context(), request)
+				readStorageClient, err := client.ReadFile(cmd.Context(), request)
 				if err != nil {
 					return fmt.Errorf("unable to read file: %w", err)
 				}
 
-				resp, err := readFileClient.Recv()
+				resp, err := readStorageClient.Recv()
 				if err == io.EOF {
 					break
 				}

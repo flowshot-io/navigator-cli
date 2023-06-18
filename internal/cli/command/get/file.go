@@ -18,7 +18,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				FileID: c.id,
 			}
 
-			client, err := c.driver.clientFactory.FileClient()
+			client, err := c.driver.clientFactory.StorageClient()
 			if err != nil {
 				return err
 			}

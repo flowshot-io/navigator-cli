@@ -19,7 +19,7 @@ func (c *Command) NewAssetCommand() *cobra.Command {
 				Name: name,
 			}
 
-			client, err := c.driver.clientFactory.CommandClient()
+			client, err := c.driver.clientFactory.ResourceClient()
 			if err != nil {
 				return err
 			}

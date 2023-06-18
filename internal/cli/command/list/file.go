@@ -16,7 +16,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &fileservice.ListFilesRequest{}
 
-			client, err := c.driver.clientFactory.FileClient()
+			client, err := c.driver.clientFactory.StorageClient()
 			if err != nil {
 				return err
 			}

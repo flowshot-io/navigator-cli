@@ -16,7 +16,7 @@ func (c *Command) NewAssetCommand() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &commandservice.ListAssetsRequest{}
 
-			client, err := c.driver.clientFactory.CommandClient()
+			client, err := c.driver.clientFactory.ResourceClient()
 			if err != nil {
 				return err
 			}
