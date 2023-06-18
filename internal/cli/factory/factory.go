@@ -17,21 +17,21 @@ type ClientFactory interface {
 }
 
 type clientFactory struct {
-	fileHost    string
-	commandHost string
-	queryHost   string
+	storageHost  string
+	resourceHost string
+	searchHost   string
 }
 
 func NewClientFactory() ClientFactory {
 	return &clientFactory{
-		queryHost:   "localhost:50052",
-		commandHost: "localhost:50050",
-		fileHost:    "localhost:50051",
+		resourceHost: "localhost:50050",
+		storageHost:  "localhost:50051",
+		searchHost:   "localhost:50052",
 	}
 }
 
 func (f *clientFactory) QueryClient() (queryservice.QueryServiceClient, error) {
-	conn, err := grpc.Dial(f.queryHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(f.searchHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("unable to create query services gRPC connection: %w", err)
 	}
@@ -40,7 +40,7 @@ func (f *clientFactory) QueryClient() (queryservice.QueryServiceClient, error) {
 }
 
 func (f *clientFactory) CommandClient() (commandservice.CommandServiceClient, error) {
-	conn, err := grpc.Dial(f.commandHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(f.resourceHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("unable to create command services gRPC connection: %w", err)
 	}
@@ -49,7 +49,7 @@ func (f *clientFactory) CommandClient() (commandservice.CommandServiceClient, er
 }
 
 func (f *clientFactory) FileClient() (fileservice.FileServiceClient, error) {
-	conn, err := grpc.Dial(f.fileHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(f.storageHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("unable to create file services gRPC connection: %w", err)
 	}
