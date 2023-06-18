@@ -41,7 +41,7 @@ func (d *Driver) NewGetCommand() *cobra.Command {
 	)
 
 	cc.PersistentFlags().StringVarP(&cmd.id, "id", "i", "", "The ID of the object to get.")
-	cc.MarkFlagRequired("id")
+	cc.MarkPersistentFlagRequired("id")
 
 	return cc
 }

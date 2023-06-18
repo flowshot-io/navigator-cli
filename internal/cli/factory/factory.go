@@ -24,9 +24,9 @@ type clientFactory struct {
 
 func NewClientFactory() ClientFactory {
 	return &clientFactory{
-		queryHost:   "localhost:50053",
-		commandHost: "localhost:50054",
-		fileHost:    "localhost:50055",
+		queryHost:   "localhost:50052",
+		commandHost: "localhost:50050",
+		fileHost:    "localhost:50051",
 	}
 }
 
