@@ -35,7 +35,7 @@ func Files(assets ...*fileservice.File) string {
 	table := tablewriter.NewWriter(tableString)
 
 	table.SetCaption(true, "Query Results.")
-	table.SetHeader([]string{"ID", "AssetID", "Key", "Status", "UpdatedAt"})
+	table.SetHeader([]string{"ID", "AssetID", "Key", "Status", "UploadedAt"})
 
 	for _, result := range assets {
 		row := []string{
@@ -43,7 +43,7 @@ func Files(assets ...*fileservice.File) string {
 			result.AssetID,
 			result.Key,
 			result.Status.String(),
-			result.UploadedAt.AsTime().Format("2000-00-00 00:00:00"),
+			result.UploadedAt.AsTime().Format("2006-01-02 15:04:05"),
 		}
 		table.Append(row)
 	}

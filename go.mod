@@ -3,7 +3,7 @@ module github.com/flowshot-io/navigator-cli
 go 1.19
 
 require (
-	github.com/flowshot-io/navigator-client-go v0.0.0-20230620191523-91ad2cbe018f
+	github.com/flowshot-io/navigator-client-go v0.0.0-20230621111614-95bd2830c817
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.4.0

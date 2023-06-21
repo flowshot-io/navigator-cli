@@ -46,7 +46,6 @@ func (c *Command) NewFileCommand() *cobra.Command {
 
 			request := &fileservice.CreateFileRequest{
 				AssetID: assetID,
-				//Key:     filepath.Base(filePath),
 			}
 
 			client, err := c.driver.clientFactory.StorageClient()
@@ -54,12 +53,12 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				return err
 			}
 
+			cmd.Println("Creating file...")
+
 			resp, err := client.CreateFile(ctx, request)
 			if err != nil {
 				return fmt.Errorf("unable to create file: %w", err)
 			}
-
-			cmd.Println("Creating file...")
 
 			fileInfo, err := os.Stat(filePath)
 			if err != nil {
