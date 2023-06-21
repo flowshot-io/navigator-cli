@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"sync"
 
 	"github.com/flowshot-io/navigator-client-go/fileservice/v1"
@@ -47,7 +46,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 
 			request := &fileservice.CreateFileRequest{
 				AssetID: assetID,
-				Key:     filepath.Base(filePath),
+				//Key:     filepath.Base(filePath),
 			}
 
 			client, err := c.driver.clientFactory.StorageClient()

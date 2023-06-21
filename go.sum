@@ -2,8 +2,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.1/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46t
 github.com/fatih/color v1.13.0/go.mod h1:kLAiJbzzSOZDVNGyDpeOxJ47H46qBXwg5ILebYFFOfk=
 github.com/fatih/color v1.15.0 h1:kOqh6YHBtK8aywxGerMG2Eq3H6Qgoqeo13Bk2Mv/nBs=
 github.com/fatih/color v1.15.0/go.mod h1:0h5ZqXfHYED7Bhv2ZJamyIOUej9KtShiJESRwBDUSsw=
-github.com/flowshot-io/navigator-client-go v0.0.0-20230616152754-a82e29034960 h1:HY+pYFpS6zqOjnKiwU2lEKZ2CdmkCKTsyUFyRA1827w=
-github.com/flowshot-io/navigator-client-go v0.0.0-20230616152754-a82e29034960/go.mod h1:0jh2Ovw5QgJ9jBzUiDN8OKqzn7tglB71KqNIQKxmZwM=
+github.com/flowshot-io/navigator-client-go v0.0.0-20230620191523-91ad2cbe018f h1:TFJSxoWD+hvi9DdgLLNYP10GEJwZ47EtVqJAb5xmq1g=
+github.com/flowshot-io/navigator-client-go v0.0.0-20230620191523-91ad2cbe018f/go.mod h1:0jh2Ovw5QgJ9jBzUiDN8OKqzn7tglB71KqNIQKxmZwM=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=
 github.com/golang/protobuf v1.5.3 h1:KhyjKVUg7Usr/dYsdSqoFveMYd5ko72D+zANwlG1mmg=
 github.com/golang/protobuf v1.5.3/go.mod h1:XVQd3VNwM+JqD3oG2Ue2ip4fOMUkwXdXDdiuN0vRsmY=

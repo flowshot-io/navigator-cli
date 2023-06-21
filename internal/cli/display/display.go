@@ -42,8 +42,8 @@ func Files(assets ...*fileservice.File) string {
 			result.FileID,
 			result.AssetID,
 			result.Key,
-			result.Status,
-			result.UploadedAt,
+			result.Status.String(),
+			result.UploadedAt.AsTime().Format("2000-00-00 00:00:00"),
 		}
 		table.Append(row)
 	}
