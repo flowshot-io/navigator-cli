@@ -9,6 +9,9 @@ import (
 )
 
 func (c *Command) NewFileCommand() *cobra.Command {
+	var searchInput string
+	var searchType int32
+
 	cc := &cobra.Command{
 		Use:   "file",
 		Short: "List files.",
@@ -26,7 +29,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				return fmt.Errorf("unable to list files: %w", err)
 			}
 
-			display := display.NewService(client, &display.Options{
+			display := display.NewService(&display.Options{
 				DisplayImage: c.displayImage,
 				PageSize:     c.pageSize,
 			})
@@ -35,6 +38,9 @@ func (c *Command) NewFileCommand() *cobra.Command {
 			return nil
 		},
 	}
+
+	cc.Flags().StringVarP(&searchInput, "search", "s", "", "Search input")
+	cc.Flags().Int32VarP(&searchType, "type", "t", 0, "Search type")
 
 	return cc
 }

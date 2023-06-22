@@ -44,6 +44,7 @@ func NewCommand(d *Driver) *cobra.Command {
 		cmd.NewGetCommand(),
 		cmd.NewListCommand(),
 		cmd.NewDeleteCommand(),
+		cmd.NewSearchCommand(),
 	)
 
 	return c

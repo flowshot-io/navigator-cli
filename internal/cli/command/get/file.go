@@ -28,7 +28,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				return fmt.Errorf("unable to get asset: %w", err)
 			}
 
-			display := display.NewService(client, &display.Options{
+			display := display.NewService(&display.Options{
 				DisplayImage: c.displayImage,
 			})
 
