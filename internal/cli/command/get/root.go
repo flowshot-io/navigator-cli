@@ -10,8 +10,9 @@ type Driver struct {
 }
 
 type Command struct {
-	driver *Driver
-	id     string
+	driver       *Driver
+	id           string
+	displayImage bool
 }
 
 func NewDriver(clientFactory factory.ClientFactory) *Driver {
@@ -41,6 +42,7 @@ func (d *Driver) NewGetCommand() *cobra.Command {
 	)
 
 	cc.PersistentFlags().StringVarP(&cmd.id, "id", "i", "", "The ID of the object to get.")
+	cc.PersistentFlags().BoolVarP(&cmd.displayImage, "display-image", "d", false, "Display image in table.")
 	cc.MarkPersistentFlagRequired("id")
 
 	return cc

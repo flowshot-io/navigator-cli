@@ -10,7 +10,8 @@ type Driver struct {
 }
 
 type Command struct {
-	driver *Driver
+	driver       *Driver
+	displayImage bool
 }
 
 func NewDriver(clientFactory factory.ClientFactory) *Driver {
@@ -34,6 +35,8 @@ func (d *Driver) NewListCommand() *cobra.Command {
 		cmd.NewAssetCommand(),
 		cmd.NewFileCommand(),
 	)
+
+	cc.PersistentFlags().BoolVarP(&cmd.displayImage, "display-image", "d", false, "Display image in table.")
 
 	return cc
 }

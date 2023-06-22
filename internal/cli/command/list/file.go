@@ -27,7 +27,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 			}
 
 			display := display.NewService(client, &display.Options{
-				DisplayImage: true,
+				DisplayImage: c.displayImage,
 			})
 			cmd.Println(display.Files(resp.Files...))
 
