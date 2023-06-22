@@ -24,13 +24,11 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 			}
 
 			outputPath := filepath.Join(outputDir, c.id)
-			startChunkNumber := int64(1)
-
-			const chunkSize = 15 << 20 // 15 MB
+			startByte := int64(0)
 
 			// Try to resume download if the file exists
 			if fileInfo, err := os.Stat(outputPath); err == nil {
-				startChunkNumber = fileInfo.Size()/chunkSize + 1
+				startByte = fileInfo.Size() + 1
 			}
 
 			// Open the file for appending, creates it if it doesn't exist
@@ -40,32 +38,27 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 			}
 			defer file.Close()
 
+			readStorageClient, err := client.ReadFile(cmd.Context(), &fileservice.ReadFileRequest{
+				FileID:    c.id,
+				StartByte: startByte,
+			})
+			if err != nil {
+				return fmt.Errorf("unable to read file: %w", err)
+			}
+
 			for {
-				request := &fileservice.ReadFileRequest{
-					FileID:           c.id,
-					StartChunkNumber: startChunkNumber,
-				}
-
-				readStorageClient, err := client.ReadFile(cmd.Context(), request)
-				if err != nil {
-					return fmt.Errorf("unable to read file: %w", err)
-				}
-
 				resp, err := readStorageClient.Recv()
-				if err == io.EOF {
+				if err == io.EOF || resp == nil {
 					break
 				}
 				if err != nil {
-					return fmt.Errorf("unable to receive file chunk: %w", err)
+					return fmt.Errorf("unable to read file chunk: %w", err)
 				}
 
 				// Write the received data to the file
 				if _, err := file.Write(resp.Data); err != nil {
 					return fmt.Errorf("unable to write file chunk: %w", err)
 				}
-
-				// Increase chunk number for the next request
-				startChunkNumber++
 			}
 
 			cmd.Println("File downloaded successfully.")

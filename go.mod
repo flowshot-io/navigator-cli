@@ -4,12 +4,12 @@ go 1.19
 
 require (
 	github.com/disintegration/imaging v1.6.2
-	github.com/flowshot-io/navigator-client-go v0.0.0-20230621163629-c5dc79daf7b2
+	github.com/flowshot-io/navigator-client-go v0.0.0-20230622151644-2404af614960
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.4.0
-	google.golang.org/grpc v1.56.0
+	google.golang.org/grpc v1.56.1
 )
 
 require (
