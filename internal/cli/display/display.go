@@ -62,7 +62,7 @@ func (s *Service) Files(files ...*fileservice.File) string {
 		url := fmt.Sprintf("http://%s/%s.%s", s.imageHost, file.FileID, file.Extension)
 
 		var image *image.Image
-		if strings.HasPrefix(file.Mime, "image/") {
+		if strings.HasPrefix(file.Mime, "image/") && s.displayImage {
 			var err error
 			image, err = getImageFromURL(url)
 			if err != nil {
@@ -122,11 +122,16 @@ func (s *Service) RenderFiles(files ...*DisplayFile) string {
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")
 
+	var imageWidth uint = 20
 	var fileID string
 	var assetID string
 	var status string
-
 	var rows [][]string
+
+	if len(files) == 1 {
+		imageWidth = 32
+	}
+
 	for _, result := range files {
 		if result.Data != nil {
 			fileID = result.Data.FileID
@@ -144,7 +149,7 @@ func (s *Service) RenderFiles(files ...*DisplayFile) string {
 		if s.displayImage {
 			imgStr := "Image not found"
 			if result.Image != nil {
-				imgStr = renderImageToBlocks(*result.Image, 20)
+				imgStr = renderImageToBlocks(*result.Image, imageWidth)
 			}
 
 			data = append(data, imgStr)
