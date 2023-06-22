@@ -12,6 +12,7 @@ type Driver struct {
 type Command struct {
 	driver       *Driver
 	displayImage bool
+	pageSize     int
 }
 
 func NewDriver(clientFactory factory.ClientFactory) *Driver {
@@ -37,6 +38,7 @@ func (d *Driver) NewListCommand() *cobra.Command {
 	)
 
 	cc.PersistentFlags().BoolVarP(&cmd.displayImage, "display-image", "d", false, "Display image in table.")
+	cc.PersistentFlags().IntVarP(&cmd.pageSize, "page-size", "p", 6, "Page size.")
 
 	return cc
 }

@@ -27,12 +27,14 @@ type (
 	Options struct {
 		ImageHost    string
 		DisplayImage bool
+		PageSize     int
 	}
 
 	Service struct {
 		fileClient   fileservice.FileServiceClient
 		imageHost    string
 		displayImage bool
+		pageSize     int
 	}
 )
 
@@ -49,6 +51,7 @@ func NewService(fileClient fileservice.FileServiceClient, opts *Options) *Servic
 		fileClient:   fileClient,
 		imageHost:    opts.ImageHost,
 		displayImage: opts.DisplayImage,
+		pageSize:     opts.PageSize,
 	}
 }
 
@@ -128,11 +131,16 @@ func (s *Service) RenderFiles(files ...*DisplayFile) string {
 	var status string
 	var rows [][]string
 
-	if len(files) == 1 {
+	totalFiles := len(files)
+	if totalFiles == 1 {
 		imageWidth = 32
 	}
 
-	for _, result := range files {
+	if s.pageSize == 0 {
+		s.pageSize = totalFiles
+	}
+
+	for _, result := range files[:s.pageSize] {
 		if result.Data != nil {
 			fileID = result.Data.FileID
 			assetID = result.Data.AssetID

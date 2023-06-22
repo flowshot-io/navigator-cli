@@ -28,6 +28,7 @@ func (c *Command) NewFileCommand() *cobra.Command {
 
 			display := display.NewService(client, &display.Options{
 				DisplayImage: c.displayImage,
+				PageSize:     c.pageSize,
 			})
 			cmd.Println(display.Files(resp.Files...))
 
