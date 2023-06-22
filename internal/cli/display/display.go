@@ -136,6 +136,8 @@ func Assets(assets ...*commandservice.Asset) string {
 
 	table.SetCaption(true, "Query Results.")
 	table.SetHeader([]string{"ID", "Name", "CreatedAt", "UpdatedAt"})
+	table.SetRowLine(true)
+	table.SetRowSeparator("-")
 
 	var rows [][]string
 	for _, result := range assets {
