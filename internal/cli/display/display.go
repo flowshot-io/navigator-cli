@@ -63,9 +63,17 @@ func NewService(opts *Options) *Service {
 }
 
 func (s *Service) SearchResults(results ...*queryservice.SearchResult) string {
+	if len(results) == 0 {
+		return "No results found."
+	}
+
+	if s.pageSize == 0 {
+		s.pageSize = len(results)
+	}
+
 	var displayResults []*displayResult
-	for _, result := range results {
-		url := s.getImageURL(result.Key, result.Extension)
+	for _, result := range results[:s.pageSize] {
+		url := s.getImageURL(result.Key)
 
 		var image *image.Image
 		if strings.HasPrefix(result.Mime, "image/") && s.displayImage {
@@ -91,9 +99,17 @@ func (s *Service) Assets(assets ...*commandservice.Asset) string {
 }
 
 func (s *Service) Files(files ...*fileservice.File) string {
+	if len(files) == 0 {
+		return "No files found."
+	}
+
+	if s.pageSize == 0 {
+		s.pageSize = len(files)
+	}
+
 	var displayFiles []*displayFile
-	for _, file := range files {
-		url := s.getImageURL(file.Key, file.Extension)
+	for _, file := range files[:s.pageSize] {
+		url := s.getImageURL(file.Key)
 
 		var image *image.Image
 		if strings.HasPrefix(file.Mime, "image/") && s.displayImage {
@@ -138,13 +154,9 @@ func Assets(assets ...*commandservice.Asset) string {
 }
 
 func (s *Service) RenderSearchResults(results ...*displayResult) string {
-	if len(results) == 0 {
-		return ""
-	}
-
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
-	headers := []string{"ID", "Description", "URL", "Certainty", "Distance"}
+	headers := []string{"ID", "Description", "Certainty", "Distance", "URL"}
 
 	if s.displayImage {
 		headers = append(headers, "Image")
@@ -155,11 +167,16 @@ func (s *Service) RenderSearchResults(results ...*displayResult) string {
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")
 
+	if s.pageSize == 0 {
+		s.pageSize = len(results)
+	}
+
 	var fileID string
 	var description string
 	var certainty string
 	var distance string
 	var rows [][]string
+
 	for _, result := range results {
 		if result.Data != nil {
 			fileID = result.Data.Id
@@ -195,10 +212,6 @@ func (s *Service) RenderSearchResults(results ...*displayResult) string {
 }
 
 func (s *Service) RenderFiles(files ...*displayFile) string {
-	if len(files) == 0 {
-		return ""
-	}
-
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
 
@@ -224,11 +237,7 @@ func (s *Service) RenderFiles(files ...*displayFile) string {
 		imageWidth = LargeImageWidth
 	}
 
-	if s.pageSize == 0 {
-		s.pageSize = totalFiles
-	}
-
-	for _, result := range files[:s.pageSize] {
+	for _, result := range files {
 		if result.Data != nil {
 			fileID = result.Data.FileID
 			assetID = result.Data.AssetID
@@ -260,8 +269,8 @@ func (s *Service) RenderFiles(files ...*displayFile) string {
 	return tableString.String()
 }
 
-func (s *Service) getImageURL(key string, ext string) string {
-	return fmt.Sprintf("http://%s/%s.%s", s.imageHost, key, ext)
+func (s *Service) getImageURL(key string) string {
+	return fmt.Sprintf("http://%s/%s", s.imageHost, key)
 }
 
 func renderImageToBlocks(img image.Image, maxWidth uint) string {

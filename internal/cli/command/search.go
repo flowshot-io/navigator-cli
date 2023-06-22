@@ -9,20 +9,21 @@ import (
 )
 
 func (c *Command) NewSearchCommand() *cobra.Command {
-	var searchInput string
-	var searchTypeInt int32
+	var searchValue string
+	var searchType int
 	var displayImage bool
+	var pageSize int
 
 	cc := &cobra.Command{
 		Use:   "search",
 		Short: "Search files.",
 		Long:  `Search files.`,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			if searchInput == "" {
+			if searchValue == "" {
 				return fmt.Errorf("search input is required")
 			}
 
-			if searchTypeInt > 3 {
+			if searchType > 3 {
 				return fmt.Errorf("invalid search type")
 			}
 
@@ -30,8 +31,8 @@ func (c *Command) NewSearchCommand() *cobra.Command {
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			request := &queryservice.SearchFilesRequest{
-				Input: searchInput,
-				Type:  queryservice.SearchType(searchTypeInt),
+				Input: searchValue,
+				Type:  queryservice.SearchType(searchType),
 			}
 
 			client, err := c.driver.clientFactory.SearchClient()
@@ -46,6 +47,7 @@ func (c *Command) NewSearchCommand() *cobra.Command {
 
 			display := display.NewService(&display.Options{
 				DisplayImage: displayImage,
+				PageSize:     pageSize,
 			})
 
 			cmd.Println(display.SearchResults(resp.Results...))
@@ -54,9 +56,10 @@ func (c *Command) NewSearchCommand() *cobra.Command {
 		},
 	}
 
-	cc.Flags().StringVarP(&searchInput, "search", "s", "", "Search input")
-	cc.Flags().Int32VarP(&searchTypeInt, "type", "t", 1, "Search type")
+	cc.Flags().StringVarP(&searchValue, "value", "v", "", "Search value")
+	cc.Flags().IntVarP(&searchType, "type", "t", 1, "Search type")
 	cc.Flags().BoolVarP(&displayImage, "display-image", "d", false, "Display image")
+	cc.Flags().IntVarP(&pageSize, "page-size", "p", 4, "Page size")
 
 	return cc
 }
