@@ -23,7 +23,7 @@ func (c *Command) NewSearchCommand() *cobra.Command {
 				return fmt.Errorf("search input is required")
 			}
 
-			if searchType > 3 {
+			if searchType > 2 {
 				return fmt.Errorf("invalid search type")
 			}
 

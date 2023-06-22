@@ -67,7 +67,7 @@ func (s *Service) SearchResults(results ...*queryservice.SearchResult) string {
 		return "No results found."
 	}
 
-	if s.pageSize == 0 {
+	if s.pageSize == 0 || s.pageSize > len(results) {
 		s.pageSize = len(results)
 	}
 
@@ -103,7 +103,7 @@ func (s *Service) Files(files ...*fileservice.File) string {
 		return "No files found."
 	}
 
-	if s.pageSize == 0 {
+	if s.pageSize == 0 || s.pageSize > len(files) {
 		s.pageSize = len(files)
 	}
 
