@@ -26,6 +26,9 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				return fmt.Errorf("unable to list files: %w", err)
 			}
 
+			display := display.NewService(client, &display.Options{
+				DisplayImage: true,
+			})
 			cmd.Println(display.Files(resp.Files...))
 
 			return nil

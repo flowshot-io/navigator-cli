@@ -3,8 +3,10 @@ module github.com/flowshot-io/navigator-cli
 go 1.19
 
 require (
-	github.com/flowshot-io/navigator-client-go v0.0.0-20230621111614-95bd2830c817
+	github.com/disintegration/imaging v1.6.2
+	github.com/flowshot-io/navigator-client-go v0.0.0-20230621163629-c5dc79daf7b2
 	github.com/ivanpirog/coloredcobra v1.0.1
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.4.0
 	google.golang.org/grpc v1.56.0
@@ -18,6 +20,7 @@ require (
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 	golang.org/x/net v0.11.0 // indirect
 	golang.org/x/sys v0.9.0 // indirect
 	golang.org/x/text v0.10.0 // indirect

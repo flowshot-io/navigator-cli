@@ -28,6 +28,10 @@ func (c *Command) NewFileCommand() *cobra.Command {
 				return fmt.Errorf("unable to get asset: %w", err)
 			}
 
+			display := display.NewService(client, &display.Options{
+				DisplayImage: true,
+			})
+
 			cmd.Println(display.Files(resp.File))
 
 			return nil

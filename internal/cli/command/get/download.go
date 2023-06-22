@@ -26,7 +26,7 @@ func (c *Command) NewDownloadCommand() *cobra.Command {
 			outputPath := filepath.Join(outputDir, c.id)
 			startChunkNumber := int64(1)
 
-			const chunkSize = 5 << 20 // 5 MB
+			const chunkSize = 15 << 20 // 15 MB
 
 			// Try to resume download if the file exists
 			if fileInfo, err := os.Stat(outputPath); err == nil {
