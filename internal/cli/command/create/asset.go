@@ -1,27 +1,27 @@
-package command
+package create
 
 import (
 	"fmt"
 
-	"github.com/flowshot-io/navigator-client-go/navigatorservice/v1"
+	"github.com/flowshot-io/navigator-client-go/commandservice/v1"
 	"github.com/spf13/cobra"
 )
 
-func (c *Command) NewCreateCommand() *cobra.Command {
+func (c *Command) NewAssetCommand() *cobra.Command {
 	var name string
 
 	cc := &cobra.Command{
-		Use:   "create",
-		Short: "Create assets",
-		Long:  `Create assets`,
+		Use:   "asset",
+		Short: "Creates an asset",
+		Long:  `Creates an asset`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			request := &navigatorservice.CreateAssetRequest{
+			request := &commandservice.CreateAssetRequest{
 				Name: name,
 			}
 
-			client, err := c.driver.clientFactory.NavigatorClient(cmd)
+			client, err := c.driver.clientFactory.ResourceClient()
 			if err != nil {
-				return fmt.Errorf("unable to create navigator client: %w", err)
+				return err
 			}
 
 			resp, err := client.CreateAsset(cmd.Context(), request)
@@ -29,7 +29,7 @@ func (c *Command) NewCreateCommand() *cobra.Command {
 				return fmt.Errorf("unable to create asset: %w", err)
 			}
 
-			cmd.Println("Created asset: ", resp.Id)
+			cmd.Println("Created asset: ", resp.AssetID)
 
 			return nil
 		},
