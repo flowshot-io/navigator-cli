@@ -217,7 +217,7 @@ func (s *Service) RenderFiles(files ...*displayFile) string {
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
 
-	headers := []string{"ID", "AssetID", "Status", "URL"}
+	headers := []string{"ID", "AssetID", "Description", "Status", "URL"}
 
 	if s.displayImage {
 		headers = append(headers, "Image")
@@ -232,6 +232,7 @@ func (s *Service) RenderFiles(files ...*displayFile) string {
 	var fileID string
 	var assetID string
 	var status string
+	var description string
 	var rows [][]string
 
 	totalFiles := len(files)
@@ -243,12 +244,14 @@ func (s *Service) RenderFiles(files ...*displayFile) string {
 		if result.Data != nil {
 			fileID = result.Data.FileID
 			assetID = result.Data.AssetID
+			description = result.Data.Description
 			status = result.Data.Status.String()
 		}
 
 		data := []string{
 			fileID,
 			assetID,
+			description,
 			status,
 			result.URL,
 		}
