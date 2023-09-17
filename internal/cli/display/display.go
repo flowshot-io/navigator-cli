@@ -158,7 +158,7 @@ func Assets(assets ...*commandservice.Asset) string {
 func (s *Service) RenderSearchResults(results ...*displayResult) string {
 	tableString := &strings.Builder{}
 	table := tablewriter.NewWriter(tableString)
-	headers := []string{"ID", "Description", "Certainty", "Distance", "URL"}
+	headers := []string{"ID", "Description", "URL"}
 
 	if s.displayImage {
 		headers = append(headers, "Image")
@@ -175,23 +175,17 @@ func (s *Service) RenderSearchResults(results ...*displayResult) string {
 
 	var fileID string
 	var description string
-	var certainty string
-	var distance string
 	var rows [][]string
 
 	for _, result := range results {
 		if result.Data != nil {
 			fileID = result.Data.Id
 			description = result.Data.Description
-			certainty = fmt.Sprintf("%.2f", result.Data.Certainty)
-			distance = fmt.Sprintf("%.2f", result.Data.Distance)
 		}
 
 		data := []string{
 			fileID,
 			description,
-			certainty,
-			distance,
 			result.URL,
 		}
 
